@@ -1,30 +1,22 @@
 import assert from 'node:assert/strict'
 import { describe, it } from 'node:test'
 import {
-  interactiveCommandForChoice,
   launcherChoices,
   interactiveMenuItems,
   interactivePanelLayout,
   interactiveSubmenus,
   busyFrames,
   createActionLock,
-  interactiveShortcuts,
   filterApps,
   appSearchLabel,
   headerAsciiArt,
   formatResult,
   selectionEvents,
   requiresTuiConfirmation,
-  appInitialFocus,
 } from '../src/commands/interactive.js'
 import { launcherActivity } from '../src/services/launcher.js'
 
 describe('interactive command routing', () => {
-  it('does not invoke command groups without a subcommand', () => {
-    assert.equal(interactiveCommandForChoice('debloat'), undefined)
-    assert.deepEqual(interactiveCommandForChoice('status'), ['status'])
-  })
-
   it('uses the discovered launcher activity and falls back to MainActivity', () => {
     assert.equal(
       launcherActivity([{ packageName: 'com.example', activity: '.Home', installed: true, source: 'device' }], 'com.example'),
@@ -61,12 +53,10 @@ describe('interactive command routing', () => {
 
   it('uses the status view as the single device information view', () => {
     assert.equal(interactiveMenuItems.some(({ label }) => label === 'Device information'), false)
-    assert.deepEqual(interactiveCommandForChoice('status'), ['status'])
-    assert.equal(interactiveCommandForChoice('info'), undefined)
   })
 
   it('defines navigable submenus for grouped actions', () => {
-    assert.deepEqual(Object.keys(interactiveSubmenus).sort(), ['backups', 'debloat', 'devices', 'launchers', 'settings', 'telemetry'])
+    assert.deepEqual(Object.keys(interactiveSubmenus).sort(), ['backups', 'debloat', 'launchers', 'settings', 'telemetry'])
     assert.ok(interactiveSubmenus.debloat.some(({ label }) => label === 'Run safe preset'))
     assert.ok(interactiveSubmenus.launchers.some(({ label }) => label === 'Install third-party launcher'))
     assert.ok(interactiveSubmenus.launchers.some(({ label }) => label === 'Choose launcher from list'))
@@ -86,18 +76,6 @@ describe('interactive command routing', () => {
     release()
     assert.equal(await first, true)
     assert.equal(completions, 1)
-  })
-
-  it('maps visible main-menu shortcuts to their actions', () => {
-    assert.equal(interactiveShortcuts.r, 'Remote control')
-    assert.equal(interactiveShortcuts.d, 'Device status')
-    assert.equal(interactiveShortcuts.c, 'Run a command')
-  })
-
-  it('exposes device discovery and connection actions', () => {
-    assert.ok(interactiveSubmenus.devices.some(({ label }) => label === 'Connect new device'))
-    assert.ok(interactiveSubmenus.devices.some(({ label }) => label === 'Refresh devices'))
-    assert.equal(interactiveShortcuts.v, 'Devices')
   })
 
   it('exposes the remaining non-interactive operations in the TUI', () => {
@@ -149,7 +127,4 @@ describe('interactive command routing', () => {
     assert.equal(requiresTuiConfirmation(['settings', 'status']), false)
   })
 
-  it('starts the Apps screen focused on results for arrow navigation', () => {
-    assert.equal(appInitialFocus, 'results')
-  })
 })

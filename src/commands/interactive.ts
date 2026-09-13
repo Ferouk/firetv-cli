@@ -10,7 +10,7 @@ import { downloadFireTvLauncher, fireTvLaunchers } from '../services/launcherCat
 import { status as deviceStatus } from '../services/device.js'
 
 type MenuAction = () => Promise<void>
-export type InteractiveMenuItem = { key: string; label: string; hint: string; action: MenuAction }
+export type InteractiveMenuItem = { key: string; label: string }
 export type InteractiveSubmenuItem = { label: string; args: string[] }
 
 const orange = '#FF9900'
@@ -19,7 +19,6 @@ const green = '#6BCB77'
 export const busyFrames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
 export const selectionEvents = ['enter', 'select'] as const
 export const appSearchLabel = ' Search '
-export const appInitialFocus = 'results'
 
 export const headerAsciiArt = `  ███████╗██╗██████╗ ███████╗████████╗██╗   ██╗
   ██╔════╝██║██╔══██╗██╔════╝╚══██╔══╝██║   ██║
@@ -69,11 +68,6 @@ export const interactivePanelLayout = {
 } as const
 
 export const interactiveSubmenus: Record<string, InteractiveSubmenuItem[]> = {
-  devices: [
-    { label: 'Connect new device', args: [] },
-    { label: 'Refresh devices', args: [] },
-    { label: 'Back', args: [] },
-  ],
   debloat: [
     { label: 'List packages', args: ['debloat', 'list'] },
     { label: 'Package status', args: ['debloat', 'status'] },
@@ -108,10 +102,6 @@ export const interactiveSubmenus: Record<string, InteractiveSubmenuItem[]> = {
   ],
 }
 
-export function interactiveCommandForChoice(choice: string): string[] | undefined {
-  return ['screenshot', 'status'].includes(choice) ? [choice] : undefined
-}
-
 export function launcherChoices(launchers: Launcher[]) {
   return launchers.map((item) => ({ name: `${item.packageName}/${item.activity || ''}`, value: item.packageName }))
 }
@@ -141,26 +131,23 @@ const remoteActions: Array<{ key: string; label: string; action: RemoteAction }>
 ]
 
 export const interactiveMenuItems: InteractiveMenuItem[] = [
-  { key: 'r', label: 'Remote control', hint: 'Navigate, play, and adjust volume', action: async () => {} },
-  { key: 'a', label: 'Apps', hint: 'List installed applications', action: async () => {} },
-  { key: 't', label: 'Type text', hint: 'Send text to the active screen', action: async () => {} },
-  { key: 's', label: 'Screenshot', hint: 'Save the current TV screen locally', action: async () => {} },
-  { key: 'd', label: 'Device status', hint: 'Check the ADB connection', action: async () => {} },
-  { key: 'v', label: 'Devices', hint: 'Discover and connect Fire TV devices', action: async () => {} },
-  { key: 'b', label: 'Debloat', hint: 'Preview safe package cleanup', action: async () => {} },
-  { key: 'e', label: 'Telemetry', hint: 'Preview telemetry controls', action: async () => {} },
-  { key: 'g', label: 'Settings', hint: 'Preview quality-of-life tweaks', action: async () => {} },
-  { key: 'l', label: 'Launchers', hint: 'List installed HOME launchers', action: async () => {} },
-  { key: 'k', label: 'Backups', hint: 'Create or list device backups', action: async () => {} },
-  { key: 'c', label: 'Run a command', hint: 'Use any firetv command', action: async () => {} },
-  { key: 'o', label: 'Reboot', hint: 'Restart the Fire TV', action: async () => {} },
-  { key: 'x', label: 'Disconnect', hint: 'Disconnect the active device', action: async () => {} },
-  { key: 'q', label: 'Quit', hint: 'Leave interactive mode', action: async () => {} },
+  { key: 'r', label: 'Remote control' },
+  { key: 'a', label: 'Apps' },
+  { key: 't', label: 'Type text' },
+  { key: 's', label: 'Screenshot' },
+  { key: 'd', label: 'Device status' },
+  { key: 'v', label: 'Devices' },
+  { key: 'b', label: 'Debloat' },
+  { key: 'e', label: 'Telemetry' },
+  { key: 'g', label: 'Settings' },
+  { key: 'l', label: 'Launchers' },
+  { key: 'k', label: 'Backups' },
+  { key: 'c', label: 'Run a command' },
+  { key: 'o', label: 'Reboot' },
+  { key: 'x', label: 'Disconnect' },
+  { key: 'q', label: 'Quit' },
 ]
 
-export const interactiveShortcuts = Object.fromEntries(
-  interactiveMenuItems.map((item) => [item.key, item.label]),
-)
 
 function createScreen() {
   const screen = blessed.screen({ smartCSR: true, title: 'firetv' })

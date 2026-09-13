@@ -30,12 +30,3 @@ export async function saveConfig(config: Config) {
   await mkdir(dirname(configPath), { recursive: true })
   await writeFile(configPath, `${JSON.stringify(parsed, null, 2)}\n`, 'utf8')
 }
-export async function updateConfig(patch: Partial<Config>) {
-  const current = await loadConfig()
-  await saveConfig({
-    ...current,
-    ...patch,
-    device: patch.device ?? current.device,
-    aliases: patch.aliases ?? current.aliases,
-  })
-}
