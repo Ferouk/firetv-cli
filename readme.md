@@ -164,4 +164,5 @@ yarn format:check     # Check formatting
 
 ## License
 
-No license has been specified yet.
+This project is licensed under the [MIT License](./LICENSE). See
+[CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidelines.

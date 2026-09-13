@@ -2,6 +2,7 @@
   "name": "firetv",
   "version": "1.0.0",
   "description": "Control Amazon Fire TV devices through ADB",
+  "license": "MIT",
   "packageManager": "yarn@1.22.22",
   "type": "module",
   "bin": {
