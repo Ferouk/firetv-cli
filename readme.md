@@ -84,6 +84,10 @@ firetv interactive
 # alias: firetv shell
 ```
 
+<p align="center">
+  <img src="./screenshot.png" alt="firetv interactive mode" width="720">
+</p>
+
 Common commands:
 
 ```bash
