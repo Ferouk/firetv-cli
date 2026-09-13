@@ -78,6 +78,8 @@ firetv device use 192.168.1.42:5555
 Start the interactive prompt:
 
 ```bash
+firetv
+# explicit command:
 firetv interactive
 # alias: firetv shell
 ```
